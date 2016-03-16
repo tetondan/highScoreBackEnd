@@ -21,10 +21,9 @@ CREATE TABLE scores (
 
 CREATE TABLE highscores (
   id int NOT NULL AUTO_INCREMENT,
-  score_id int,
+  score int,
   user_id int,
   FOREIGN KEY (user_id) REFERENCES users (id),
-  FOREIGN KEY (score_id) REFERENCES scores (id),
   PRIMARY KEY (id)
 );
 
@@ -45,5 +44,5 @@ INSERT users (username, email) VALUES
   ('Laura', 'laura@gmail.com'),
   ('Katie', 'katie@gmail.com')
 
-/*mysql -u <username>root <-p?> < server/schema.sql*/
+/*mysql -u <username>root <-p?> < schema.sql*/
 
