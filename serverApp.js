@@ -1,5 +1,4 @@
 var express = require('express');
-var db = require('./mySQLdb');
 var models = require ('./model.js');
 var app = express();
 var port = process.env.PORT || 3000;
@@ -27,24 +26,24 @@ app.post('/api/', function (req, res) {
     })
     .then(function(newEntry){
       if(newEntry === false){
-        res.json('Sorry, not a new high score').sendStatus(201)
+        res.status(201).json('Sorry, not a new high score')
       } else {
         return models.setNewHighScore(newEntry)
       }
     })
     .then(function(result){
-      res.json('New High Score!').sendStatus(201)
+      res.status(201).json('New High Score!')
     })
     .catch(function(err){
       console.log(err);
-      res.sendStatus(404)
+      res.status(404).send(err)
     })
 });
 
 app.get('/api/highScores', function (req, res) {
   models.getHighScoresNoId()
     .then(function(scores){
-      res.send(scores).sendStatus(200)
+      res.status(200).send(scores)
     })
 })
 

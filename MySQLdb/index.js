@@ -5,6 +5,5 @@ exports.connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: 'a',
-  database: 'usersandscores',
-  multipleStatements: true
+  database: 'usersandscores'
 });

@@ -1,12 +1,12 @@
-var db = require('./mySQLdb');
+const db = require('./mySQLdb');
 
-var getUserId = function(username){
-  return new Promise(function(resolve, reject){
-    db.connection.query('SELECT id FROM users WHERE username = ?;',username, function(err, result){
+const getUserId = (username) => {
+  return new Promise((resolve, reject) => {
+    db.connection.query('SELECT id FROM users WHERE username = ?;',username, (err, result) => {
       if(err){
         reject(err)
       } else if (result[0] === undefined){
-        reject(undefined)
+        reject('user not found')
       } else {
         resolve(result[0].id);
       }
@@ -14,10 +14,10 @@ var getUserId = function(username){
   });
 };
 
-var setScore = function(userID, score){
-  return new Promise(function(resolve, reject){
+const setScore = (userID, score) => {
+  return new Promise((resolve, reject) => {
     var scoreObj = {score: score, user_id: userID}
-    db.connection.query('INSERT INTO scores SET ?', scoreObj, function(err, res){
+    db.connection.query('INSERT INTO scores SET ?;', scoreObj, (err, res) => {
       if(err){
         reject(err)
       } else {
@@ -27,21 +27,20 @@ var setScore = function(userID, score){
   });
 };
 
-var getAndCheckHighScores = function(currentScore, userId){
+const getAndCheckHighScores = (currentScore, userId) => {
   return new Promise(function(resolve, reject){
-    db.connection.query('SELECT * FROM highscores;', function(err, res){
+    db.connection.query('SELECT * FROM highscores;', (err, res) => {
       if(err){
         reject(err)
       } else {
         var highScores = res
-        highScores.sort(function(a,b){return b.score - a.score})
-        if(highScores.length < 10 || highScores[9].score < currentScore){
-          var previousHighScore = 0;
-          var previousId
+        highScores.sort((a,b) => {return b.score - a.score})
+        if(highScores.length < 10 || highScores[9].score <= currentScore){
+          var previousHighScore, previousId;
           var newEntry = {id: 0, score: currentScore, user_id: userId};
           //if score by same user already exists, set it to previousHighScore
-          highScores.forEach(function(x){
-            if(x.user_id === userId){
+          highScores.forEach((x) => {
+            if(Number(x.user_id) === Number(userId)){
               previousHighScore = x.score;
               previousId = x.id;
             }
@@ -51,6 +50,7 @@ var getAndCheckHighScores = function(currentScore, userId){
             if(previousHighScore >= currentScore){
               resolve(false)
             } else {
+            //otherwise set current id to previous id this will make sure the same person can not enter more than one score
               newEntry.id = previousId
             }
           }
@@ -73,10 +73,10 @@ var getAndCheckHighScores = function(currentScore, userId){
   });
 };
 
-var setNewHighScore = function(newEntry){
-  return new Promise(function(resolve, reject){
+const setNewHighScore = (newEntry) => {
+  return new Promise((resolve, reject) => {
     if(newEntry.bool){
-      db.connection.query('UPDATE highscores SET user_id= ?, score= ? WHERE id= ?;', [newEntry.user_id, newEntry.score, newEntry.id], function(err, res){
+      db.connection.query('UPDATE highscores SET user_id= ?, score= ? WHERE id= ?;', [newEntry.user_id, newEntry.score, newEntry.id], (err, res) => {
         if(err){
           reject(err);
         } else {
@@ -84,7 +84,7 @@ var setNewHighScore = function(newEntry){
         }
       }) 
     } else {
-      db.connection.query('INSERT highscores SET ?', newEntry, function(err, result){
+      db.connection.query('INSERT highscores SET ?;', newEntry, (err, result) => {
         if(err){
           console.log('error', err)
           reject(err);
@@ -96,13 +96,13 @@ var setNewHighScore = function(newEntry){
   })
 }
 
-var getHighScoresNoId = function(){
-  return new Promise(function(resolve, reject){
-    db.connection.query('SELECT users.username, highScores.score FROM highScores INNER JOIN users ON users.id = highScores.user_id;', function(err, result){
+const getHighScoresNoId = () => {
+  return new Promise((resolve, reject) => {
+    db.connection.query('SELECT users.username, highScores.score FROM highScores INNER JOIN users ON users.id = highScores.user_id;', (err, result) => {
       if(err){
         reject(err)
       } else {
-        result.sort(function(a,b){return b.score - a.score})
+        result.sort((a,b) => {return b.score - a.score})
         resolve(result);
       }
     })

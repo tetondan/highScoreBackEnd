@@ -1,0 +1,24 @@
+{
+  "name": "highscorebackend",
+  "version": "1.0.0",
+  "description": "API concerning user scores and top ten high scores",
+  "main": "serverApp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node serverApp.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tetondan/highScoreBackEnd.git"
+  },
+  "author": "Daniel Frehner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tetondan/highScoreBackEnd/issues"
+  },
+  "homepage": "https://github.com/tetondan/highScoreBackEnd#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "mysql": "^2.10.2"
+  }
+}
