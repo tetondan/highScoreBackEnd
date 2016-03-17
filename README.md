@@ -2,7 +2,8 @@
 Develop a back end returning the top 10 high scores.
 
 ##Requires
-Node
+Node v0.11.13 or higher
+
 MySQL
 
 ##Instructions
