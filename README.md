@@ -7,10 +7,15 @@ MySQL
 
 ##Instructions
 To get started:
+
 With MySQL running enter on command line: 
+
 1.) mysql -u <your username> -p < schema.sql
+
 (you will need to change the username/password in the MySQLdb/index.js file to your own)
+
 2.) npm install
+
 3.) npm start
 
 Server will be up and running. 
