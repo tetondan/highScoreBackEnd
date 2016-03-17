@@ -10,26 +10,41 @@ var server = app.listen(port, function () {
   console.log('listening at http://%s:%s', host, port);
 });
 
-app.put('/api/', function (req, res) {
+app.post('/api/', function (req, res) {
   //collect username and score
   //scores must be in query string format ?username=username&score=score
   var username = req.query.username;
   var score = Number(req.query.score);
+  //set variables for use later
+  var userId
   models.getUserId(username)
     .then(function(id){
-      return models.setScore(id, score)
+      userId = id;
+      return models.setScore(id, score);
     })
-    .then(function(id){
-      res.json(id)
+    .then(function(){
+      return models.getAndCheckHighScores(score, userId);
+    })
+    .then(function(newEntry){
+      if(newEntry === false){
+        res.json('Sorry, not a new high score').sendStatus(201)
+      } else {
+        return models.setNewHighScore(newEntry)
+      }
+    })
+    .then(function(result){
+      res.json('New High Score!').sendStatus(201)
     })
     .catch(function(err){
       console.log(err);
-      res.send(404)
+      res.sendStatus(404)
     })
 });
 
 app.get('/api/highScores', function (req, res) {
-  //get all high scores and return as JSON object
-
+  models.getHighScoresNoId()
+    .then(function(scores){
+      res.send(scores).sendStatus(200)
+    })
 })
 
