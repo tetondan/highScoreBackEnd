@@ -27,6 +27,8 @@ CREATE TABLE highscores (
   PRIMARY KEY (id)
 );
 
+/* populating database with names and emails*/
+
 INSERT users (username, email) VALUES 
   ('Daniel', 'daniel@gmail.com'),
   ('Sara', 'sara@yahoo.com'),
